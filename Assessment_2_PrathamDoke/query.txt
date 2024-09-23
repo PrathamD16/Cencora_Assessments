@@ -1,0 +1,20 @@
+1. db.employees.aggregate([
+    {$group: 
+        {_id: "$department", totalEmployees: {$sum: 1}}}
+    ])
+2. db.employees.aggregate([
+    {$group: 
+        {_id: "$department", performance_score: {$avg: "$performance_score"}}}
+    ])
+3. db.employees.aggregate([
+    {$group: 
+        {_id: "$department", total_bonus_amount: {$sum: "$bonus_amount"}}}
+    ])
+4. db.employees.aggregate([
+    {$group:
+        {_id: "$department", totalemployee: {$sum: 1}, 
+            average_score: {$avg: "$performance_score"}, 
+            total_bonus: {$sum: "$bonus_amount"}}}, 
+        {$match: 
+            {total_bonus: {$lt: 20000}}}
+    ]).pretty()

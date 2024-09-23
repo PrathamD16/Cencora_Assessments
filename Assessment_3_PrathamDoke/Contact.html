@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Page</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      form {
+        max-width: 400px;
+        margin: auto;
+      }
+      label,
+      input,
+      select {
+        display: block;
+        margin-bottom: 10px;
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Enter Your Information</h1>
+    <form id="userForm">
+      <label for="firstName">First Name</label>
+      <input type="text" id="firstName" name="firstName" required />
+
+      <label for="lastName">Last Name</label>
+      <input type="text" id="lastName" name="lastName" required />
+
+      <label for="contactNumber">Contact Number</label>
+      <input
+        type="tel"
+        id="contactNumber"
+        name="contactNumber"
+        pattern="[0-9]{10}"
+        required
+      />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required />
+
+      <label>Address Type</label>
+      <input type="radio" id="home" name="addressType" value="home" required />
+      <label for="home">Home Address</label>
+      <input type="radio" id="office" name="addressType" value="office" />
+      <label for="office">Office Address</label>
+
+      <div id="addressFields" class="hidden">
+        <label for="address">Address</label>
+        <input type="text" id="address" name="address" required />
+      </div>
+
+      <button type="submit" id="submitButton" disabled>Submit</button>
+    </form>
+
+    <script>
+      document.querySelectorAll('input[name="addressType"]').forEach((elem) => {
+        elem.addEventListener("change", function () {
+          const addressFields = document.getElementById("addressFields");
+          addressFields.classList.remove("hidden");
+          validateForm();
+        });
+      });
+
+      function validateForm() {
+        const form = document.getElementById("userForm");
+        const submitButton = document.getElementById("submitButton");
+        if (form.checkValidity()) {
+          submitButton.disabled = false;
+        } else {
+          submitButton.disabled = true;
+        }
+      }
+
+      document.querySelectorAll("#userForm input").forEach((input) => {
+        input.addEventListener("input", validateForm);
+      });
+
+      let editIndex = null;
+
+      function populateForm(data) {
+        document.getElementById("firstName").value = data.firstName;
+        document.getElementById("lastName").value = data.lastName;
+        document.getElementById("contactNumber").value = data.contactNumber;
+        document.getElementById("email").value = data.email;
+        document.querySelector(
+          `input[name="addressType"][value="${data.addressType}"]`
+        ).checked = true;
+        document.getElementById("address").value = data.address;
+        document.getElementById("addressFields").classList.remove("hidden");
+        validateForm();
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has("editIndex")) {
+        editIndex = parseInt(urlParams.get("editIndex"), 10);
+        const users = JSON.parse(sessionStorage.getItem("users")) || [];
+        if (editIndex >= 0 && editIndex < users.length) {
+          populateForm(users[editIndex]);
+        }
+      }
+
+      document
+        .getElementById("userForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          const firstName = document.getElementById("firstName").value;
+          const lastName = document.getElementById("lastName").value;
+          const contactNumber = document.getElementById("contactNumber").value;
+          const email = document.getElementById("email").value;
+          const addressType = document.querySelector(
+            'input[name="addressType"]:checked'
+          ).value;
+          const address = document.getElementById("address").value;
+          const user = {
+            firstName,
+            lastName,
+            contactNumber,
+            email,
+            addressType,
+            address,
+          };
+
+          let users = JSON.parse(sessionStorage.getItem("users")) || [];
+
+          if (editIndex !== null) {
+            users[editIndex] = user;
+          } else {
+            users.push(user);
+          }
+
+          sessionStorage.setItem("users", JSON.stringify(users));
+
+          window.location.href = "Home.html";
+        });
+    </script>
+  </body>
+</html>

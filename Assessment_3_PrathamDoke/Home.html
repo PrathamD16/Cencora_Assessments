@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    .user {
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      width: 300px;
+      margin: auto;
+      text-align: left;
+    }
+    .user button {
+      margin-right: 10px;
+    }
+    #addUserButton {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome!</h1>
+  <button id="addUserButton">Add User</button>
+  <div id="userInfo"></div>
+
+  <script>
+    
+    let users = JSON.parse(sessionStorage.getItem('users')) || [];
+
+    
+    function displayUsers() {
+      const userInfoDiv = document.getElementById('userInfo');
+      userInfoDiv.innerHTML = '';
+      if (users.length > 0) {
+        users.forEach((user, index) => {
+          const userDiv = document.createElement('div');
+          userDiv.className = 'user';
+          userDiv.innerHTML = `
+            <p>First Name: ${user.firstName}</p>
+            <p>Last Name: ${user.lastName}</p>
+            <p>Contact Number: ${user.contactNumber}</p>
+            <p>Email: ${user.email}</p>
+            <p>Address Type: ${user.addressType.charAt(0).toUpperCase() + user.addressType.slice(1)}</p>
+            <p>Address: ${user.address}</p>
+            <button onclick="editUser(${index})">Edit</button>
+            <button onclick="deleteUser(${index})">Delete</button>
+          `;
+          userInfoDiv.appendChild(userDiv);
+        });
+      } else {
+        userInfoDiv.innerHTML = '<p>No users found.</p>';
+      }
+    }
+
+    function editUser(index) {
+      window.location.href = `Contact.html?editIndex=${index}`;
+    }
+  
+    function deleteUser(index) {
+      users.splice(index, 1);
+      sessionStorage.setItem('users', JSON.stringify(users));
+      displayUsers();
+    }
+    
+    document.getElementById('addUserButton').addEventListener('click', function() {
+      window.location.href = 'Contact.html';
+    });
+
+    
+    displayUsers();
+  </script>
+</body>
+</html>
