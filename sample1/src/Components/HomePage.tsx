@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { UserList, UserProp } from '../Redux/UserReducer/UserProp'
 import { RootState } from '../Redux/store'
 import { useSelector } from 'react-redux'
+import ProfileTile from './ProfileTile'
 
 const HomePage = () => {
   const nav = useNavigate()
@@ -24,7 +25,15 @@ const HomePage = () => {
       </div>
       {/* Using Map  */}
       <div className='my-10'>
-        <h2>Display all list</h2>
+        {
+          res.map((x: UserProp, _i: number) => {
+            return (
+              <div key={_i}>
+                <ProfileTile _id={_i} fname={x.fname} lname={x.lname} address={x.address} contact={x.contact} email={x.email} />
+              </div>
+            )
+          })
+        }
       </div>
     </div>
   )

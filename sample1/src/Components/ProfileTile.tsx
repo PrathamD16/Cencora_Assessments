@@ -1,9 +1,15 @@
 import React from 'react'
+import {UserList, UserProp} from '../Redux/UserReducer/UserProp'
 
-const ProfileTile = () => {
+const ProfileTile: React.FC<UserProp> = ({_id, fname, lname, email, address, contact}) => {
   return (
     <div>
-      This is tile page
+      <p>{_id}</p>
+      <p>{fname} - {lname}</p>
+      <p>{email}</p>
+      <p>{address.atype}</p>
+      <p>{address.details}</p>
+      <p>{contact}</p>
     </div>
   )
 }
