@@ -1,12 +1,21 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { UserList, UserProp } from '../Redux/UserReducer/UserProp'
+import { RootState } from '../Redux/store'
+import { useSelector } from 'react-redux'
 
 const HomePage = () => {
   const nav = useNavigate()
 
+  const res = useSelector((state: RootState) => state.userreducer.users)
+
   const clickHandler = () => {
     nav("/createContact")
   }
+
+  useEffect(() => {
+    console.log(res)
+  }, [res])
 
   return (
     <div className='p-[1rem] bg-slate-100 shadow-md mx-10 my-5'>
