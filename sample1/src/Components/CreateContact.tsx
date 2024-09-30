@@ -27,7 +27,8 @@ const CreateContact = () => {
 
   useEffect(() => {
     if (fname !== null && lname !== null && email !== null && contact !== null && address !== null) {
-      if(isAlphabetic(fname) && isAlphabetic(lname) && JSON.stringify(contact).length === 10 && email.search('@') >= 0){
+      let tele: string = JSON.stringify(contact)
+      if(isAlphabetic(fname) && isAlphabetic(lname) && tele.length == 10 && email.search('@') > -1){
         setbtnDisable(false)
       }
       else{

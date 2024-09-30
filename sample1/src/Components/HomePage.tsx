@@ -20,7 +20,7 @@ const HomePage = () => {
 
   return (
     <div className='p-[1rem] bg-slate-100 shadow-md mx-10 my-5'>
-      <div className='flex'>
+      <div className='flex sticky top-0'>
         <button onClick={clickHandler} className='flex-1 bg-blue-600 text-white px-5 py-3 rounded-lg hover:bg-blue-900'>Click to Add</button>
       </div>
       {/* Using Map  */}

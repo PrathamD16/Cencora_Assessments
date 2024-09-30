@@ -2,7 +2,7 @@ import CompRouter from "./Routes/CompRouter"
 
 const App = () => {
   return (
-    <div>
+    <div className="">
       <CompRouter />
     </div>
   )
