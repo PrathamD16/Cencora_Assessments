@@ -1,5 +1,5 @@
 type UserProp = {
-    _id ?: number,
+    _id : number,
     fname: string | null,
     lname: string | null,
     contact:string | null,

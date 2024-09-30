@@ -14,13 +14,13 @@ const userSlice = createSlice({
         addUser(state, action:PayloadAction<UserProp>){
             state.users.push(action.payload)
         },
-        // deleteUser(state, action:PayloadAction<number>){
-        //     let temp = [...state.users]
-        //     temp.splice(action.payload, 1)
-        //     state.users = [...temp]
-        // }
+        deleteUser(state, action:PayloadAction<number>){
+            let temp = [...state.users]
+            temp.splice(action.payload, 1)
+            state.users = [...temp]
+        }
     }
 })
 
 export default userSlice.reducer;
-export const {addUser} = userSlice.actions
+export const {addUser, deleteUser} = userSlice.actions
