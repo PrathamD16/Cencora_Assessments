@@ -1,7 +1,21 @@
 import React from 'react'
 import { UserList, UserProp } from '../Redux/UserReducer/UserProp'
+import { deleteUser } from '../Redux/UserReducer/UserSlice'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 const ProfileTile: React.FC<UserProp> = ({ _id, fname, lname, email, address, contact }) => {
+  const dispatch = useDispatch()
+  const nav = useNavigate()
+
+  const deleteHandler = () => {
+    dispatch(deleteUser(_id || NaN))
+  }
+
+  const editHandler = () => {
+    nav(`/edit/${_id}`)
+  }
+
   return (
     <div className='flex justify-between bg-white p-3 shadow-md rounded-md'>
       <div className='block'>
@@ -16,10 +30,12 @@ const ProfileTile: React.FC<UserProp> = ({ _id, fname, lname, email, address, co
       </div>
       <div className='space-y-3 md:space-y-0 md:space-x-5 md:flex'>
         <div>
-          <button className='bg-red-500 text-white px-3 py-1 text-sm rounded-lg items-center hover:bg-red-700'>Delete</button>
+          <button onClick={deleteHandler} className='bg-red-500 text-white px-3 py-1 text-sm rounded-lg items-center hover:bg-red-700'>Delete</button>
         </div>
         <div>
-          <button className='bg-green-500 text-white px-5 py-1 text-sm rounded-lg hover:bg-green-700'>Edit</button>
+          <button 
+          onClick={editHandler}
+          className='bg-green-500 text-white px-5 py-1 text-sm rounded-lg hover:bg-green-700'>Edit</button>
         </div>
       </div>
     </div>

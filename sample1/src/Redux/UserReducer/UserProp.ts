@@ -2,7 +2,7 @@ type UserProp = {
     _id ?: number,
     fname: string | null,
     lname: string | null,
-    contact:string | null,
+    contact:number | null,
     email:string | null,
     address:{
         atype:string | null,

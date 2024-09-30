@@ -11,7 +11,7 @@ const CompRouter = () => {
     <Routes>
         <Route path='/' element={<LoginPage />}/>
         <Route path='/homepage'element={<HomePage />} />
-        <Route path='/:id'element={<EditPage />}/>
+        <Route path='/edit/:id'element={<EditPage />}/>
         <Route path='/createContact' element={<CreateContact />}/>
     </Routes>
   )

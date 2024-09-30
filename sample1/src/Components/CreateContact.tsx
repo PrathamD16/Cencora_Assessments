@@ -6,6 +6,11 @@ import { useNavigate } from 'react-router-dom'
 
 const CreateContact = () => {
 
+  // Regex
+  function isAlphabetic(name: string): boolean {
+    return /^[a-zA-Z]+$/.test(name);
+  }
+
   const dispatch = useDispatch()
   const nav = useNavigate()
 
@@ -21,8 +26,16 @@ const CreateContact = () => {
 
 
   useEffect(() => {
-    if (fname !== null || lname !== null || email !== null || contact !== null || address !== null) {
-      setbtnDisable(false)
+    if (fname !== null && lname !== null && email !== null && contact !== null && address !== null) {
+      if(isAlphabetic(fname) && isAlphabetic(lname) && JSON.stringify(contact).length === 10 && email.search('@') >= 0){
+        setbtnDisable(false)
+      }
+      else{
+        setbtnDisable(true)
+      }
+    }
+    else{
+      setbtnDisable(true)
     }
   }, [fname, lname, email, contact, address])
 
@@ -63,11 +76,11 @@ const CreateContact = () => {
         atype: selectedRadio,
         details: address,
       },
-      contact: JSON.stringify(contact),
+      contact: contact,
       email,
     }
 
-    console.log(UserDetail)
+    // console.log(UserDetail)
     dispatch(addUser(UserDetail))
     nav("/homepage")
 
