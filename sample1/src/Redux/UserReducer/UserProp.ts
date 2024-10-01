@@ -14,4 +14,9 @@ type UserList = {
     users: UserProp[]
 }
 
-export type {UserList, UserProp}
+type UpdateProp = {
+    users: UserProp,
+    id: number
+}
+
+export type {UserList, UserProp, UpdateProp}

@@ -16,6 +16,7 @@ const HomePage = () => {
 
   useEffect(() => {
     // console.log(res)
+    console.log("UseEffect from Homepage")
   }, [res])
 
   return (
@@ -29,7 +30,7 @@ const HomePage = () => {
           res.map((x: UserProp, _i: number) => {
             return (
               <div className='my-3 hover:scale-[102%]' key={_i}>
-                <ProfileTile _id={_i} fname={x.fname} lname={x.lname} address={x.address} contact={x.contact} email={x.email} />
+                <ProfileTile _id={x._id} fname={x.fname} lname={x.lname} address={x.address} contact={x.contact} email={x.email} />
               </div>
             )
           })

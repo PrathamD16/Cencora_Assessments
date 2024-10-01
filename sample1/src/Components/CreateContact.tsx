@@ -71,6 +71,7 @@ const CreateContact = () => {
     e.preventDefault()
 
     const UserDetail: UserProp = {
+      _id: Math.random(),
       fname,
       lname,
       address: {

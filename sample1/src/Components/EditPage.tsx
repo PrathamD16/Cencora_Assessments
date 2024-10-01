@@ -2,15 +2,26 @@ import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { RootState } from '../Redux/store'
+import { updateUser } from '../Redux/UserReducer/UserSlice'
+import { UpdateProp, UserProp } from '../Redux/UserReducer/UserProp'
 
 
 const EditPage = () => {
+  // Regex
+  function isAlphabetic(name: string): boolean {
+    return /^[a-zA-Z]+$/.test(name);
+  }
+
   const dispatch = useDispatch()
-  const res = useSelector((state: RootState) => state.userreducer.users)
-  const { id } = useParams()
+  const {id} = useParams()
+
+  const obj = useSelector((state: RootState) => state.userreducer.users.find(pre => pre._id === parseFloat(id as string)))
+  const ind = useSelector((state: RootState) => state.userreducer.users.findIndex(pre => pre._id === parseFloat(id as string)))
+
   const nav = useNavigate()
 
   const [btnDisable, setbtnDisable] = useState(true)
+  const [_id, setId] = useState<number | null>(null)
 
   const [selectedRadio, setSelectedRadio] = useState<string | null>(null);
   const [showTextbox, setShowTextbox] = useState(false);
@@ -20,27 +31,35 @@ const EditPage = () => {
   const [contact, setContact] = useState<number | null>(0)
   const [address, setAddress] = useState<string | null>("")
 
-  let index: number;
   useEffect(() => {
-    index = parseInt(id as string, 10)
-    setFname(res[index]?.fname || '')
-    setLname(res[index]?.lname || '')
-    setEmail(res[index]?.email || '')
-    setContact(res[index]?.contact || 0)
-    setSelectedRadio(res[index]?.address?.atype || '')
-    setAddress(res[index]?.address?.details || '')
+    console.log(ind)
+    console.log(obj)
+    setFname(obj?.fname || "")
+    setLname(obj?.lname || "")
+    setContact(obj?.contact || 0)
+    setEmail(obj?.email || '#')
+    setSelectedRadio(obj?.address?.atype || "")
+    setAddress(obj?.address?.details || "")
   }, [])
 
   useEffect(() => {
-    if(fname != res[index]?.fname || lname != res[index]?.lname || contact != res[index]?.contact || email != res[index]?.email || selectedRadio != res[index].address?.atype || address != res[index].address?.details){
-      setbtnDisable(false)
+    if(fname === obj?.fname && lname === obj?.lname && contact === obj?.contact && email === obj?.email && selectedRadio === obj?.address?.atype && address === obj?.address?.details){
+      setbtnDisable(true)
+    }
+    else if(fname !== null && lname !== null && email !== null && contact !== null && address !== null) {
+      let tele: string = JSON.stringify(contact)
+      if(isAlphabetic(fname) && isAlphabetic(lname) && tele.length == 10 && email.search('@') > -1){
+        setbtnDisable(false)
+      }
+      else{
+        setbtnDisable(true)
+      }
     }
     else{
       setbtnDisable(true)
     }
-  }, [selectedRadio, fname, lname, email, contact, address])
-
-
+  }, [fname, lname, email, contact, address])
+  
   const handleRadioChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedValue = e.target.value;
     setSelectedRadio(selectedValue);
@@ -73,7 +92,26 @@ const EditPage = () => {
 
   const submitHandler = (e: SyntheticEvent<HTMLInputElement>) => {
     e.preventDefault()
-    console.log(`Update Button`)
+    const UserDetail: UserProp = {
+      _id: obj?._id || -1,
+      fname,
+      lname,
+      address: {
+        atype: selectedRadio,
+        details: address,
+      },
+      contact: contact,
+      email,
+    }
+    // console.log(UserDetail)
+    const newUser: UpdateProp = {
+      id:ind,
+      users:UserDetail
+    }
+    console.log(`Before Update`)
+    console.log(newUser)
+    dispatch(updateUser(newUser))
+    nav("/homepage")
   }
 
   return (

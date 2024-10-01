@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import {UserList, UserProp} from './UserProp'
+import {UserList, UserProp, UpdateProp} from './UserProp'
 import {PayloadAction} from '@reduxjs/toolkit'
 
 
@@ -15,12 +15,13 @@ const userSlice = createSlice({
             state.users.push(action.payload)
         },
         deleteUser(state, action:PayloadAction<number>){
-            let temp = [...state.users]
-            temp.splice(action.payload, 1)
-            state.users = [...temp]
+            state.users = state.users.filter(user => user._id !== action.payload)
+        },
+        updateUser(state, action:PayloadAction<UpdateProp>){
+            state.users[action.payload.id] = action.payload.users
         }
     }
 })
 
 export default userSlice.reducer;
-export const {addUser, deleteUser} = userSlice.actions
+export const {addUser, deleteUser, updateUser} = userSlice.actions
